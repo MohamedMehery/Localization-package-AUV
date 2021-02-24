@@ -3,19 +3,19 @@
 	 Copyright (c) 2019 Manta AUV, Vortex NTNU.
 	 All rights reserved. */
 
-#include <ros/ros.h>
-#include <std_msgs/String.h>
-#include <std_msgs/Header.h>
-#include <std_srvs/Empty.h>
-#include <nav_msgs/Odometry.h>
-#include <sensor_msgs/Imu.h>
-#include <sensor_msgs/FluidPressure.h>
-#include <geometry_msgs/Twist.h>
-#include <geometry_msgs/TwistStamped.h>
-#include <geometry_msgs/TwistWithCovariance.h>
-#include <geometry_msgs/TwistWithCovarianceStamped.h>
-#include <geometry_msgs/PoseWithCovarianceStamped.h>
-#include <geometry_msgs/AccelWithCovariance.h>
+#include <rclcpp/rclcpp.hpp> 									//modified to ros2											
+#include <std_msgs/msg/String.hpp>								//modified to ros2
+#include <std_msgs/msg/Header.hpp>								//modified to ros2
+#include <std_srvs/srv/Empty.hpp>								//modified to ros2
+#include <nav_msgs/msg/Odometry.hpp>							//modified to ros2
+#include <sensor_msgs/msg/Imu.hpp>								//modified to ros2
+#include <sensor_msgs/msg/FluidPressure.hpp>					//modified to ros2
+#include <geometry_msgs/msg/Twist.hpp>							//modified to ros2
+#include <geometry_msgs/msg/TwistStamped.hpp>					//modified to ros2
+#include <geometry_msgs/msg/TwistWithCovariance.hpp>			//modified to ros2
+#include <geometry_msgs/msg/TwistWithCovarianceStamped.hpp>		//modified to ros2
+#include <geometry_msgs/msg/PoseWithCovarianceStamped.hpp>		//modified to ros2
+#include <geometry_msgs/msg/AccelWithCovariance.hpp>			//modified to ros2
 
 
 /* Include guard to prevent double declaration of identifiers
@@ -42,18 +42,22 @@ class UnderwaterOdom {
 
 	// Nodehandle	
 
-	ros::NodeHandle nh_;	
+	//ros::NodeHandle nh_;	
+	auto nh_ = rclcpp::Node::makeshared("pubsub");
 	
 	// Subscribers
 
-	ros::Subscriber fluid_pressure_sub_;
-	ros::Subscriber dvl_twist_sub_;
+	//ros::Subscriber fluid_pressure_sub_;
+	auto fluid_pressure_sub_ = nh_->create_subscription<sensor_msgs::msg::FluidPressure>;
+
+	//ros::Subscriber dvl_twist_sub_;
+	auto dvl_twist_sub_ = nh_->create_subscription<geometry_msgs::msg::TwistWithCovarianceStamped>;
 
 	// Publishers
 
 	//ros::Publisher depth_odom_pub_;
-	ros::Publisher odom_pub_;
-
+	//ros::Publisher odom_pub_;
+	auto odom_pub_ = nh_->create_publisher<nav_msgs::msg::Odometry>;
 	// Variables
 
 	double atmospheric_pressure; // [kPa]
@@ -61,7 +65,7 @@ class UnderwaterOdom {
 	double earth_gravitation; //[m/s2]
 
 	// Messages
-	nav_msgs::Odometry odom;
+	nav_msgs::msg::Odometry odom;
 
 };
 
