@@ -56,9 +56,9 @@ std::ostream& operator<<(std::ostream& os, const tf2::Quaternion &quat);
 std::ostream& operator<<(std::ostream& os, const tf2::Transform &trans);
 std::ostream& operator<<(std::ostream& os, const std::vector<double> &vec);
 
-namespace RobotLocalization
+namespace robot_localization
 {
-namespace RosFilterUtilities
+namespace ros_filter_utilities
 {
 
 double getYaw(const tf2::Quaternion quat);
@@ -71,23 +71,24 @@ double getYaw(const tf2::Quaternion quat);
 //! @param[in] timeout - How long to block before falling back to last transform
 //! @param[out] targetFrameTrans - The resulting transform object
 //! @param[in] silent - Whether or not to print transform warnings
-//! @return Sets the value of @p targetFrameTrans and returns true if successful,
-//! false otherwise.
+//! @return Sets the value of @p targetFrameTrans and returns true if
+//! successful, false otherwise.
 //!
 //! This method attempts to obtain a transform from the @p sourceFrame to the @p
-//! targetFrame at the specific @p time. If no transform is available at that time,
-//! it attempts to simply obtain the latest transform. If that still fails, then the
-//! method checks to see if the transform is going from a given frame_id to itself.
-//! If any of these checks succeed, the method sets the value of @p targetFrameTrans
-//! and returns true, otherwise it returns false.
+//! targetFrame at the specific @p time. If no transform is available at that
+//! time, it attempts to simply obtain the latest transform. If that still
+//! fails, then the method checks to see if the transform is going from a given
+//! frame_id to itself. If any of these checks succeed, the method sets the
+//! value of @p targetFrameTrans and returns true, otherwise it returns false.
 //!
-bool lookupTransformSafe(const tf2_ros::Buffer &buffer,
-                         const std::string &targetFrame,
-                         const std::string &sourceFrame,
-                         const rclcpp::Time &time,
-                         const rclcpp::Duration &timeout,
-                         tf2::Transform &targetFrameTrans,
-                         const bool silent = false);
+bool lookupTransformSafe(
+  const tf2_ros::Buffer * buffer,
+  const std::string & target_frame,
+  const std::string & source_frame,
+  const rclcpp::Time & time,
+  const rclcpp::Duration & timeout,
+  tf2::Transform & target_frame_trans,
+  const bool silent = false);
 
 //! @brief Method for safely obtaining transforms.
 //! @param[in] buffer - tf buffer object to use for looking up the transform
@@ -96,22 +97,23 @@ bool lookupTransformSafe(const tf2_ros::Buffer &buffer,
 //! @param[in] time - The time at which we want the transform
 //! @param[out] targetFrameTrans - The resulting transform object
 //! @param[in] silent - Whether or not to print transform warnings
-//! @return Sets the value of @p targetFrameTrans and returns true if successful,
-//! false otherwise.
+//! @return Sets the value of @p targetFrameTrans and returns true if
+//! successful, false otherwise.
 //!
 //! This method attempts to obtain a transform from the @p sourceFrame to the @p
-//! targetFrame at the specific @p time. If no transform is available at that time,
-//! it attempts to simply obtain the latest transform. If that still fails, then the
-//! method checks to see if the transform is going from a given frame_id to itself.
-//! If any of these checks succeed, the method sets the value of @p targetFrameTrans
-//! and returns true, otherwise it returns false.
+//! targetFrame at the specific @p time. If no transform is available at that
+//! time, it attempts to simply obtain the latest transform. If that still
+//! fails, then the method checks to see if the transform is going from a given
+//! frame_id to itself. If any of these checks succeed, the method sets the
+//! value of @p targetFrameTrans and returns true, otherwise it returns false.
 //!
-bool lookupTransformSafe(const tf2_ros::Buffer &buffer,
-                         const std::string &targetFrame,
-                         const std::string &sourceFrame,
-                         const rclcpp::Time &time,
-                         tf2::Transform &targetFrameTrans,
-                         const bool silent = false);
+bool lookupTransformSafe(
+  const tf2_ros::Buffer * buffer,
+  const std::string & targetFrame,
+  const std::string & sourceFrame,
+  const rclcpp::Time & time,
+  tf2::Transform & targetFrameTrans,
+  const bool silent = false);
 
 //! @brief Utility method for converting quaternion to RPY
 //! @param[in] quat - The quaternion to convert
@@ -119,21 +121,23 @@ bool lookupTransformSafe(const tf2_ros::Buffer &buffer,
 //! @param[out] pitch - The converted pitch
 //! @param[out] yaw - The converted yaw
 //!
-void quatToRPY(const tf2::Quaternion &quat, double &roll, double &pitch, double &yaw);
+void quatToRPY(
+  const tf2::Quaternion & quat, double & roll, double & pitch,
+  double & yaw);
 
 //! @brief Converts our Eigen state vector into a TF transform/pose
 //! @param[in] state - The state to convert
 //! @param[out] stateTF - The converted state
 //!
-void stateToTF(const Eigen::VectorXd &state, tf2::Transform &stateTF);
+void stateToTF(const Eigen::VectorXd & state, tf2::Transform & stateTF);
 
 //! @brief Converts a TF transform/pose into our Eigen state vector
 //! @param[in] stateTF - The state to convert
 //! @param[out] state - The converted state
 //!
-void TFtoState(const tf2::Transform &stateTF, Eigen::VectorXd &state);
+void TFtoState(const tf2::Transform & stateTF, Eigen::VectorXd & state);
 
-}  // namespace RosFilterUtilities
-}  // namespace RobotLocalization
+}  // namespace ros_filter_utilities
+}  // namespace robot_localization
 
 #endif  // ROBOT_LOCALIZATION_ROS_FILTER_UTILITIES_H
