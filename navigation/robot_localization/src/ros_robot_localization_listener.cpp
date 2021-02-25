@@ -33,18 +33,19 @@
 #include "robot_localization/ros_robot_localization_listener.h"
 #include "robot_localization/ros_filter_utilities.h"
 
-#include <map>
-#include <string>
-#include <vector>
-
-#include <Eigen/Dense>
 #include <tf2/LinearMath/Matrix3x3.h>
 #include <tf2/LinearMath/Quaternion.h>
+#include <tf2/time.h>
+#include <tf2_eigen/tf2_eigen.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <yaml-cpp/yaml.h>
-#include <eigen_conversions/eigen_msg.h>
 
-#include <XmlRpcException.h>
+#include <exception>
+#include <functional>
+#include <string>
+#include <vector>
+#include <map>
+#include <memory>
 
 namespace RobotLocalization
 {
