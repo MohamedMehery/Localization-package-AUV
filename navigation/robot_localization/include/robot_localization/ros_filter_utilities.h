@@ -33,6 +33,7 @@
 #ifndef ROBOT_LOCALIZATION_ROS_FILTER_UTILITIES_H
 #define ROBOT_LOCALIZATION_ROS_FILTER_UTILITIES_H
 
+#include <rclcpp/time.hpp>
 #include <tf2/LinearMath/Quaternion.h>
 #include <tf2/LinearMath/Transform.h>
 #include <tf2_ros/buffer.h>
@@ -44,7 +45,10 @@
 #include <string>
 #include <vector>
 
-#define RF_DEBUG(msg) if (filter_.getDebug()) { debugStream_ << msg; }
+#define RF_DEBUG(msg)\
+     if (filter_.getDebug()) {\
+      debugStream_ << msg; \
+      }
 
 // Handy methods for debug output
 std::ostream& operator<<(std::ostream& os, const tf2::Vector3 &vec);
@@ -80,8 +84,8 @@ double getYaw(const tf2::Quaternion quat);
 bool lookupTransformSafe(const tf2_ros::Buffer &buffer,
                          const std::string &targetFrame,
                          const std::string &sourceFrame,
-                         const ros::Time &time,
-                         const ros::Duration &timeout,
+                         const rclcpp::Time &time,
+                         const rclcpp::Duration &timeout,
                          tf2::Transform &targetFrameTrans,
                          const bool silent = false);
 
@@ -105,7 +109,7 @@ bool lookupTransformSafe(const tf2_ros::Buffer &buffer,
 bool lookupTransformSafe(const tf2_ros::Buffer &buffer,
                          const std::string &targetFrame,
                          const std::string &sourceFrame,
-                         const ros::Time &time,
+                         const rclcpp::Time &time,
                          tf2::Transform &targetFrameTrans,
                          const bool silent = false);
 

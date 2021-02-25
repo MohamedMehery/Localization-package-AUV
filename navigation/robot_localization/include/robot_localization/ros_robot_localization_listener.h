@@ -35,14 +35,15 @@
 
 #include "robot_localization/robot_localization_estimator.h"
 
-#include <string>
-
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 #include <message_filters/subscriber.h>
 #include <message_filters/time_synchronizer.h>
-#include <nav_msgs/Odometry.h>
-#include <geometry_msgs/AccelWithCovarianceStamped.h>
+#include <nav_msgs/msg/odometry.hpp>
+#include <geometry_msgs/msg/accel_with_covariance_stamped.hpp>
 #include <tf2_ros/transform_listener.h>
+
+#include <memory>
+#include <string>
 
 namespace RobotLocalization
 {
@@ -63,8 +64,7 @@ public:
   //! The RosRobotLocalizationListener constructor initializes nodehandles, subscribers, a filter for synchronized
   //! listening to the topics it subscribes to, and an instance of the RobotLocalizationEstimator.
   //!
-  RosRobotLocalizationListener();
-
+  explicit RosRobotLocalizationListener(rclcpp::Node::SharedPtr node);
   //! @brief Destructor
   //!
   //! Empty destructor
@@ -97,9 +97,10 @@ public:
   //!
   //! @return false if buffer is empty, true otherwise
   //!
-  bool getState(const ros::Time& ros_time, const std::string& frame_id,
-                Eigen::VectorXd& state, Eigen::MatrixXd& covariance,
-                const std::string& world_frame_id = "") const;
+  bool getState(
+    const rclcpp::Time & rclcpp_time, const std::string & frame_id,
+    Eigen::VectorXd & state, Eigen::MatrixXd & covariance,
+    const std::string & world_frame_id = "") const;
 
   //!
   //! \brief getBaseFrameId Returns the base frame id of the localization listener
@@ -122,33 +123,47 @@ private:
   //! @param[in] odometry message
   //! @param[in] accel message
   //!
-  void odomAndAccelCallback(const nav_msgs::Odometry& odom, const geometry_msgs::AccelWithCovarianceStamped& accel);
-
+  void odomAndAccelCallback(
+    const std::shared_ptr<nav_msgs::msg::Odometry const> & odom,
+    const std::shared_ptr<geometry_msgs::msg::AccelWithCovarianceStamped const> &
+    accel);
   //! @brief The core state estimator that facilitates inter- and
   //! extrapolation between buffered states.
   //!
-  RobotLocalizationEstimator* estimator_;
-
+  std::unique_ptr<RobotLocalizationEstimator> estimator_;
   //! @brief A public handle to the ROS node
   //!
-  ros::NodeHandle nh_;
-
+  //ros::NodeHandle nh_;  // <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<problem
+  rclcpp::Node::SharedPtr nh_
   //! @brief A private handle to the ROS node
   //!
-  ros::NodeHandle nh_p_;
-
+  //ros::NodeHandle nh_p_;// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<problem
+  rclcpp::Node::SharedPtr nh_P_
   //! @brief Subscriber to the odometry state topic (output of a filter node)
   //!
-  message_filters::Subscriber<nav_msgs::Odometry> odom_sub_;
+  message_filters::Subscriber<nav_msgs::msg::Odometry> odom_sub_;
 
   //! @brief Subscriber to the acceleration state topic (output of a filter node)
   //!
-  message_filters::Subscriber<geometry_msgs::AccelWithCovarianceStamped> accel_sub_;
+  message_filters::Subscriber<geometry_msgs::msg::AccelWithCovarianceStamped>
+  accel_sub_;
 
   //! @brief Waits for both an Odometry and an Accel message before calling a single callback function
   //!
-  message_filters::TimeSynchronizer<nav_msgs::Odometry, geometry_msgs::AccelWithCovarianceStamped> sync_;
+  message_filters::TimeSynchronizer<nav_msgs::msg::Odometry,
+    geometry_msgs::msg::AccelWithCovarianceStamped> sync_;
 
+
+
+  //! @brief rclcpp interface to clock
+  //!
+  rclcpp::Clock::SharedPtr node_clock_;
+
+  //! @brief rclcpp interface to logging
+  //!
+  rclcpp::node_interfaces::NodeLoggingInterface::SharedPtr node_logger_;
+
+  
   //! @brief Child frame id received from the Odometry message
   //!
   std::string base_frame_id_;
