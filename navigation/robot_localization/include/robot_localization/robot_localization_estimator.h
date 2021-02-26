@@ -42,7 +42,8 @@
 #include "robot_localization/filter_utilities.h"
 #include "robot_localization/filter_common.h"
 
-namespace RobotLocalization
+
+namespace robot_localization
 {
 
 struct Twist
@@ -175,9 +176,11 @@ public:
   unsigned int getSize() const;
 
 private:
-  friend std::ostream& operator<<(std::ostream &os, const RobotLocalizationEstimator& rle)
+  friend std::ostream& operator<<(std::ostream &os,
+   const RobotLocalizationEstimator& rle)
   {
-    for ( boost::circular_buffer<EstimatorState>::const_iterator it = rle.state_buffer_.begin();
+    for ( boost::circular_buffer<EstimatorState>::const_iterator it =
+     rle.state_buffer_.begin();
           it != rle.state_buffer_.end(); ++it )
     {
       os << *it << "\n";
@@ -202,8 +205,10 @@ private:
   //! @param[in] requested_time - time stamp to extrapolate to
   //! @param[out] state_at_req_time - predicted state at requested time
   //!
-  void interpolate(const EstimatorState& given_state_1, const EstimatorState& given_state_2,
-                   const double requested_time, EstimatorState& state_at_req_time) const;
+  void interpolate(const EstimatorState& given_state_1, 
+                  const EstimatorState& given_state_2,
+                  const double requested_time, 
+                  EstimatorState& state_at_req_time) const;
 
   //!
   //! @brief The buffer holding the system states that have come in. Interpolation and extrapolation is done starting
@@ -217,6 +222,6 @@ private:
   FilterBase* filter_;
 };
 
-}  // namespace RobotLocalization
+}  // namespace robot_localization
 
 #endif  // ROBOT_LOCALIZATION_ROBOT_LOCALIZATION_ESTIMATOR_H

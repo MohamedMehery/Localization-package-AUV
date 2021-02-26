@@ -32,15 +32,27 @@
 
 #include "robot_localization/ros_filter_types.h"
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
+
 
 int main(int argc, char **argv)
 {
-  ros::init(argc, argv, "ekf_navigation_node");
+  //ros::init(argc, argv, "ekf_navigation_node");
+  rclcpp::init(argc, argv);
 
-  RobotLocalization::RosEkf ekf;
+  //RobotLocalization::RosEkf ekf;
 
-  ekf.run();
+  //ekf.run();
+
+  rclcpp::NodeOptions options;
+  options.arguments({"ekf_navigation_node"});
+  std::shared_ptr<robot_localization::RosEkf> ekf =
+    std::make_shared<robot_localization::RosEkf>(options);
+
+  ekf->initialize();
+  
+  rclcpp::spin(filter->get_node_base_interface());
+  rclcpp::shutdown();
 
   return EXIT_SUCCESS;
 }

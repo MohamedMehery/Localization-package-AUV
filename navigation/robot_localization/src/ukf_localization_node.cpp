@@ -32,24 +32,26 @@
 
 #include "robot_localization/ros_filter_types.h"
 
-#include <ros/ros.h>
+#include <rclcpp/rclcpp.hpp>
 
+#include <algorithm>
+#include <string>
+#include <memory>
 #include <vector>
 
-int main(int argc, char **argv)
+int main(int argc, char ** argv)
 {
-  ros::init(argc, argv, "ukf_navigation_node");
-  ros::NodeHandle nhLocal("~");
-
-  std::vector<double> args(3, 0);
-
-  nhLocal.param("alpha", args[0], 0.001);
-  nhLocal.param("kappa", args[1], 0.0);
-  nhLocal.param("beta", args[2], 2.0);
-
-  RobotLocalization::RosUkf ukf(args);
-
-  ukf.run();
-
-  return EXIT_SUCCESS;
+  rclcpp::init(argc, argv);
+  rclcpp::NodeOptions options;
+  options.arguments({"ukf_filter_node"});
+  std::shared_ptr<robot_localization::RosUkf> filter =
+    std::make_shared<robot_localization::RosUkf>(options);
+  double alpha = filter->declare_parameter("alpha", 0.001);
+  double kappa = filter->declare_parameter("kappa", 0.0);
+  double beta = filter->declare_parameter("beta", 2.0);
+  filter->getFilter().setConstants(alpha, kappa, beta);
+  filter->initialize();
+  rclcpp::spin(filter->get_node_base_interface());
+  rclcpp::shutdown();
+  return 0;
 }
