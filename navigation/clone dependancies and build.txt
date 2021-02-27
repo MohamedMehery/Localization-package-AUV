@@ -1,0 +1,8 @@
+git clone -b eloquent https://github.com/ros/diagnostics.git
+colcon build --packages-select diagnostic_updater
+git clone -b ros2 https://github.com/ros-geographic-info/geographic_info.git
+colcon build --packages-select geographic_msgs
+git clone -b eloquent https://github.com/ros2/launch.git
+colcon build --packages-select launch
+colcon build --packages-select launch_testing
+colcon build --packages-select launch_testing_ament_cmake

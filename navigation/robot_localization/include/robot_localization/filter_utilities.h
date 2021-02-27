@@ -33,12 +33,18 @@
 #ifndef ROBOT_LOCALIZATION_FILTER_UTILITIES_H
 #define ROBOT_LOCALIZATION_FILTER_UTILITIES_H
 
-#include <Eigen/Dense>
 
-#include <iomanip>
+#include <Eigen/Dense>
+#include <rclcpp/duration.hpp>
+#include <rclcpp/time.hpp>
+#include <std_msgs/msg/header.hpp>
+
 #include <iostream>
+#include <ostream>
 #include <string>
 #include <vector>
+
+#include "filter_common.h"
 
 #define FB_DEBUG(msg) \
   if (getDebug()) { \
@@ -46,16 +52,21 @@
   }
 
 // Handy methods for debug output
-std::ostream& operator<<(std::ostream& os, const Eigen::MatrixXd &mat);
-std::ostream& operator<<(std::ostream& os, const Eigen::VectorXd &vec);
-std::ostream& operator<<(std::ostream& os, const std::vector<size_t> &vec);
-std::ostream& operator<<(std::ostream& os, const std::vector<int> &vec);
+std::ostream & operator<<(std::ostream & os, const Eigen::MatrixXd & mat);
+std::ostream & operator<<(std::ostream & os, const Eigen::VectorXd & vec);
+std::ostream & operator<<(std::ostream & os, const std::vector<size_t> & vec);
+std::ostream & operator<<(std::ostream & os, const std::vector<int> & vec);
 
 namespace robot_localization
 {
 namespace filter_utilities
 {
 
+/**
+ * @brief Utility method keeping RPY angles in the range [-pi, pi]
+ * @param[in] rotation - The rotation to bind
+ * @return the bounded value
+ */
 inline double clampRotation(double rotation)
 {
   while (rotation > PI) {

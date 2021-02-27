@@ -45,16 +45,17 @@
 #include <string>
 #include <vector>
 
-#define RF_DEBUG(msg)\
-     if (filter_.getDebug()) {\
-      debugStream_ << msg; \
-      }
+#define RF_DEBUG(msg) \
+  if (filter_.getDebug()) { \
+    debug_stream_ << msg; \
+  }
 
 // Handy methods for debug output
-std::ostream& operator<<(std::ostream& os, const tf2::Vector3 &vec);
-std::ostream& operator<<(std::ostream& os, const tf2::Quaternion &quat);
-std::ostream& operator<<(std::ostream& os, const tf2::Transform &trans);
-std::ostream& operator<<(std::ostream& os, const std::vector<double> &vec);
+std::ostream & operator<<(std::ostream & os, const tf2::Vector3 & vec);
+std::ostream & operator<<(std::ostream & os, const tf2::Quaternion & quat);
+std::ostream & operator<<(std::ostream & os, const tf2::Transform & trans);
+std::ostream & operator<<(std::ostream & os, const std::vector<double> & vec);
+std::ostream & operator<<(std::ostream & os, const std::vector<bool> & vec);
 
 namespace robot_localization
 {

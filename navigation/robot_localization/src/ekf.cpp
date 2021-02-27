@@ -30,8 +30,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "robot_localization/ekf.h"
-#include "robot_localization/filter_common.h"
+
+#include <robot_localization/ekf.h>
+#include <robot_localization/filter_common.h>
+#include <Eigen/Dense>
+#include <rclcpp/duration.hpp>
+#include <vector>
 
 // #include <XmlRpcException.h>
 
