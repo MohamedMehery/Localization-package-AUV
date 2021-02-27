@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, 2015, 2016, Charles River Analytics, Inc.
+ * Copyright (c) 2014, 2015, 2016 Charles River Analytics, Inc.
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,9 +30,10 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "robot_localization/ros_filter_utilities.h"
-#include "robot_localization/filter_common.h"
 #include <geometry_msgs/msg/transform_stamped.hpp>
+#include <robot_localization/filter_common.h>
+#include <robot_localization/filter_utilities.h>
+#include <robot_localization/ros_filter_utilities.h>
 #include <tf2/time.h>
 #include <tf2_geometry_msgs/tf2_geometry_msgs.h>
 #include <tf2_ros/buffer.h>
@@ -90,7 +91,6 @@ std::ostream & operator<<(std::ostream & os, const std::vector<double> & vec)
   return os;
 }
 
-
 std::ostream & operator<<(std::ostream & os, const std::vector<bool> & vec)
 {
   os << "(" << std::boolalpha;
@@ -103,7 +103,6 @@ std::ostream & operator<<(std::ostream & os, const std::vector<bool> & vec)
 
   return os;
 }
-
 
 namespace robot_localization
 {
