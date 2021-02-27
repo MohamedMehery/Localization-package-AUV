@@ -30,7 +30,7 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "robot_localization/SetPose.h"
+#include "robot_localization/srv/SetPose.h"
 
 #include <ros/ros.h>
 #include <nav_msgs/Odometry.h>

@@ -36,7 +36,7 @@
 #include "robot_localization/filter_utilities.h"
 #include "robot_localization/filter_common.h"
 #include <robot_localization/filter_state.hpp>
-#include <robot_localization/measurement.hpp>
+#include <robot_localization/measurements.hpp>
 #include <Eigen/Dense>
 
 #include <algorithm>
