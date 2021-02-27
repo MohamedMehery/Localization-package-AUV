@@ -35,9 +35,9 @@
 
 #include "robot_localization/ros_filter_utilities.h"
 #include "robot_localization/filter_common.h"
-#include "robot_localization/filter_base.h"
+#include "../../../build/robot_localization/rosidl_generator_c/robot_localization/srv/set_pose.h"
 
-#include <robot_localization/SetPose.h>
+#include <robot_localization/srv/SetPose.h>
 #include <robot_localization/ToggleFilterProcessing.h>
 
 #include <rclcpp/rclcpp.hpp> 							  		//modified to ros2
@@ -59,7 +59,7 @@
 #include <diagnostic_updater/publisher.h>
 #include <diagnostic_msgs/msg/DiagnosticStatus.h>//modified to ros2
 
-#include <XmlRpcException.h>
+// #include <XmlRpcException.h>
 
 #include <Eigen/Dense>
 

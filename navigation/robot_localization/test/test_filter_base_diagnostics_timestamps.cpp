@@ -38,7 +38,7 @@
 
 #include "robot_localization/filter_base.h"
 #include "robot_localization/filter_common.h"
-#include "robot_localization/SetPose.h"
+#include "robot_localization/srv/SetPose.h"
 
 
 #include <diagnostic_msgs/DiagnosticArray.h>
