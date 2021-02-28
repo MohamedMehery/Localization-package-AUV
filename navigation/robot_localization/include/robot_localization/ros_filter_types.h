@@ -37,7 +37,6 @@
 #include "robot_localization/ekf.h"
 #include "robot_localization/ukf.h"
 
-
 namespace robot_localization
 {
 typedef RosFilter<Ukf> RosUkf;

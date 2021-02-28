@@ -33,9 +33,8 @@
 #include "robot_localization/robot_localization_estimator.h"
 #include "robot_localization/ekf.h"
 #include "robot_localization/ukf.h"
-
+#include <memory>
 #include <vector>
-
 
 namespace robot_localization
 {
@@ -202,4 +201,4 @@ void RobotLocalizationEstimator::interpolate(
   extrapolate(given_state_1, requested_time, state_at_req_time);
 }
 
-}  // namespace RobotLocalization
+}  // namespace robot_localization

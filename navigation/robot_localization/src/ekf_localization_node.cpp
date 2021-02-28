@@ -37,22 +37,14 @@
 
 int main(int argc, char **argv)
 {
-  //ros::init(argc, argv, "ekf_navigation_node");
+
   rclcpp::init(argc, argv);
-
-  //RobotLocalization::RosEkf ekf;
-
-  //ekf.run();
-
   rclcpp::NodeOptions options;
-  options.arguments({"ekf_navigation_node"});
-  std::shared_ptr<robot_localization::RosEkf> ekf =
+  options.arguments({"ekf_filter_node"});
+  std::shared_ptr<robot_localization::RosEkf> filter =
     std::make_shared<robot_localization::RosEkf>(options);
-
-  ekf->initialize();
-  
+  filter->initialize();
   rclcpp::spin(filter->get_node_base_interface());
   rclcpp::shutdown();
-
-  return EXIT_SUCCESS;
+  return 0;
 }

@@ -54,12 +54,13 @@ struct Twist
 
 //! @brief Robot Localization Estimator State
 //!
-//! The Estimator State data structure bundles the state information of the estimator.
+//! The Estimator State data structure bundles the state information of the
+//! estimator.
 //!
 struct EstimatorState
 {
-  EstimatorState():
-    time_stamp(0.0),
+  EstimatorState()
+  : time_stamp(0.0),
     state(STATE_SIZE),
     covariance(STATE_SIZE, STATE_SIZE)
   {
@@ -76,11 +77,11 @@ struct EstimatorState
   //! @brief System state covariance at time = time_stamp
   Eigen::MatrixXd covariance;
 
-  friend std::ostream& operator<<(std::ostream &os, const EstimatorState& state)
+  friend std::ostream & operator<<(std::ostream & os, const EstimatorState & state)
   {
     return os << "state:\n - time_stamp: " << state.time_stamp <<
-                 "\n - state: \n" << state.state <<
-                 " - covariance: \n" << state.covariance;
+           "\n - state: \n" << state.state <<
+           " - covariance: \n" << state.covariance;
   }
 };
 
@@ -96,7 +97,6 @@ enum EstimatorResult
   Failed
 };
 }  // namespace EstimatorResults
-typedef EstimatorResults::EstimatorResult EstimatorResult;
 
 namespace FilterTypes
 {
@@ -107,25 +107,26 @@ enum FilterType
   NotDefined
 };
 }  // namespace FilterTypes
-typedef FilterTypes::FilterType FilterType;
 
 //! @brief Robot Localization Listener class
 //!
-//! The Robot Localization Estimator class buffers states of and inputs to a system and can interpolate and extrapolate
-//! based on a given system model.
+//! The Robot Localization Estimator class buffers states of and inputs to a
+//! system and can interpolate and extrapolate based on a given system model.
 //!
 class RobotLocalizationEstimator
 {
 public:
   //! @brief Constructor for the RobotLocalizationListener class
   //!
-  //! @param[in] args - Generic argument container (not used here, but needed so that the ROS filters can pass arbitrary
-  //! arguments to templated filter types).
+  //! @param[in] args - Generic argument container (not used here, but needed
+  //! so that the ROS filters can pass arbitrary arguments to templated filter
+  //! types).
   //!
-  explicit RobotLocalizationEstimator(unsigned int buffer_capacity,
-                                      FilterType filter_type,
-                                      const Eigen::MatrixXd& process_noise_covariance,
-                                      const std::vector<double>& filter_args = std::vector<double>());
+  explicit RobotLocalizationEstimator(
+    unsigned int buffer_capacity,
+    FilterTypes::FilterType filter_type,
+    const Eigen::MatrixXd & process_noise_covariance,
+    const std::vector<double> & filter_args = std::vector<double>());
 
   //! @brief Destructor for the RobotLocalizationListener class
   //!
@@ -135,7 +136,7 @@ public:
   //!
   //! @param[in] state - The new state vector to set the internal state to
   //!
-  void setState(const EstimatorState& state);
+  void setState(const EstimatorState & state);
 
   //! @brief Returns the state at a given time
   //!
@@ -146,7 +147,9 @@ public:
   //!
   //! @return GetStateResult enum
   //!
-  EstimatorResult getState(const double time, EstimatorState &state) const;
+  EstimatorResults::EstimatorResult getState(
+    const double time,
+    EstimatorState & state) const;
 
   //! @brief Clears the internal state buffer
   //!
@@ -160,8 +163,8 @@ public:
 
   //! @brief Returns the buffer capacity
   //!
-  //! Returns the number of EstimatorState objects that can be pushed to the buffer before old ones are dropped. (The
-  //! capacity of the buffer).
+  //! Returns the number of EstimatorState objects that can be pushed to the
+  //! buffer before old ones are dropped. (The capacity of the buffer).
   //!
   //! @return buffer capacity
   //!
@@ -176,12 +179,12 @@ public:
   unsigned int getSize() const;
 
 private:
-  friend std::ostream& operator<<(std::ostream &os,
-   const RobotLocalizationEstimator& rle)
+  friend std::ostream & operator<<(
+    std::ostream & os,
+    const RobotLocalizationEstimator & rle)
   {
-    for ( boost::circular_buffer<EstimatorState>::const_iterator it =
-     rle.state_buffer_.begin();
-          it != rle.state_buffer_.end(); ++it )
+    for (boost::circular_buffer<EstimatorState>::const_iterator it =
+      rle.state_buffer_.begin(); it != rle.state_buffer_.end(); ++it)
     {
       os << *it << "\n";
     }
@@ -194,9 +197,10 @@ private:
   //! @param[in] requested_time - time stamp to extrapolate to
   //! @param[out] state_at_req_time - predicted state at requested time
   //!
-  void extrapolate(const EstimatorState& boundary_state,
-                   const double requested_time,
-                   EstimatorState& state_at_req_time) const;
+  void extrapolate(
+    const EstimatorState & boundary_state,
+    const double requested_time,
+    EstimatorState & state_at_req_time) const;
 
   //! @brief Interpolates the given state to a requested time stamp
   //!
@@ -205,23 +209,22 @@ private:
   //! @param[in] requested_time - time stamp to extrapolate to
   //! @param[out] state_at_req_time - predicted state at requested time
   //!
-  void interpolate(const EstimatorState& given_state_1, 
-                  const EstimatorState& given_state_2,
-                  const double requested_time, 
-                  EstimatorState& state_at_req_time) const;
+  void interpolate(
+    const EstimatorState & given_state_1,
+    const EstimatorState & /*given_state_2*/,
+    const double requested_time, EstimatorState & state_at_req_time) const;
 
   //!
-  //! @brief The buffer holding the system states that have come in. Interpolation and extrapolation is done starting
-  //! from these states.
+  //! @brief The buffer holding the system states that have come in.
+  //! Interpolation and extrapolation is done starting from these states.
   //!
   boost::circular_buffer<EstimatorState> state_buffer_;
 
   //!
   //! @brief A pointer to the filter instance that is used for extrapolation
   //!
-  FilterBase* filter_;
+  std::unique_ptr<FilterBase> filter_;
 };
 
 }  // namespace robot_localization
-
 #endif  // ROBOT_LOCALIZATION_ROBOT_LOCALIZATION_ESTIMATOR_H
