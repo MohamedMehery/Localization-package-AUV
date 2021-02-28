@@ -30,9 +30,6 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "robot_localization/ros_robot_localization_listener.h"
-#include "robot_localization/srv/get_state.hpp"
-
 #include <Eigen/Dense>
 
 #include <rclcpp/rclcpp.hpp>
@@ -41,10 +38,13 @@
 #include <string>
 #include <memory>
 
+#include "robot_localization/ros_robot_localization_listener.h"
+#include "robot_localization/srv/get_state.hpp"
+
 namespace robot_localization
 {
 
-class RobotLocalizationListenerNode
+class RobotLocalizationListenerNode : public rclcpp::Node
 {
 public:
   RobotLocalizationListenerNode()
@@ -98,23 +98,25 @@ private:
       "covariance at the requested time.");
     return true;
   }
-  }
 };
 
 }  // namespace robot_localization
 
-int main(int argc, char **argv)
+int main(int argc, char ** argv)
 {
-  //ros::init(argc, argv, "robot_localization_listener_node");
-  rclcpp::init(argc , argv);
-  auto rlln = std::makeshared<robot_localization::RobotLocalizationListenerNode>();
+  rclcpp::init(argc, argv);
+  auto rlln = std::make_shared<
+    robot_localization::RobotLocalizationListenerNode>();
 
-  //RobotLocalization::RobotLocalizationListenerNode rlln;
-  //ROS_INFO_STREAM("Robot Localization Listener Node: Ready to handle GetState requests at " << rlln.getService());
+  auto rll = std::make_shared<
+    robot_localization::RosRobotLocalizationListener>(rlln);
+  rlln->setRosRobotLocalizationListener(rll);
+
   RCLCPP_INFO(rlln->get_logger(),
     "Robot Localization Listener Node: Ready to handle GetState requests at %s",
     rlln->getService().c_str());
-  rclcpp::spin();
+
+  rclcpp::spin(rlln);
 
   return 0;
 }

@@ -30,14 +30,12 @@
  * POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "robot_localization/robot_localization_estimator.h"
-
-
 #include <rclcpp/rclcpp.hpp>
 #include <gtest/gtest.h>
 
 #include <vector>
 
+#include "robot_localization/robot_localization_estimator.h"
 
 TEST(RLETest, StateBuffer)
 {
