@@ -1,0 +1,11 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\robot_localization",
+    "\\robot_localization\\include",
+    "\\robot_localization\\include\\robot_localization",
+    "\\robot_localization\\src"
+  ],
+  "SelectedNode": "\\robot_localization\\src\\ekf_localization_node.cpp",
+  "PreviewInSolutionExplorer": false
+}

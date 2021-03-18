@@ -34,7 +34,9 @@
 
 #include <rclcpp/rclcpp.hpp>
 
-
+/**
+* @brief this node create kalman filter object of type EKF and initialize it
+*/
 int main(int argc, char **argv)
 {
 
