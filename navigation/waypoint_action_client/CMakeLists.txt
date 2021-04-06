@@ -1,5 +1,21 @@
-cmake_minimum_required(VERSION 2.8.3)
+cmake_minimum_required(VERSION 3.5)
 project(waypoint_action_client)
+
+set(CMAKE_CXX_STANDARD 14)
+
+if(NOT WIN32)
+  set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+endif()
+
+if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+  add_compile_options(-Wall -Wextra -Wpedantic)
+endif()
+
+if(NOT CMAKE_CONFIGURATION_TYPES AND NOT CMAKE_BUILD_TYPE)
+  message(STATUS "${PROJECT_NAME}: You did not request a specific build type: selecting 'RelWithDebInfo'.")
+  set(CMAKE_BUILD_TYPE RelWithDebInfo)
+endif()
+
 
 ## Compile as C++11, supported in ROS Kinetic and newer
 # add_compile_options(-std=c++11)
@@ -7,16 +23,19 @@ project(waypoint_action_client)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED COMPONENTS
-  actionlib
-  actionlib_msgs
-  geometry_msgs
-  message_generation
-  nav_msgs
-  roscpp
-  rospy
-  std_msgs
-)
+find_package(ament_cmake REQUIRED)
+find_package(action_msgs REQUIRED)
+find_package(geometry_msgs REQUIRED)
+find_package(nav_msgs REQUIRED)
+find_package(rosidl_default_generators REQUIRED)
+find_package(rclcpp REQUIRED)
+find_package(rclpy REQUIRED)
+find_package(std_msgs REQUIRED) 
+
+find_package(PkgConfig REQUIRED)
+pkg_check_modules(YAML_CPP yaml-cpp)
+
+set(library_name rl_lib)
 
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
@@ -44,10 +63,14 @@ find_package(catkin REQUIRED COMPONENTS
 # )
 
 ## Generate added messages and services with any dependencies listed here
- generate_messages(
-   DEPENDENCIES
-   actionlib_msgs   geometry_msgs#   nav_msgs#   std_msgs
- )
+rosidl_generate_interfaces(${PROJECT_NAME}
+  DEPENDENCIES
+    "action/Fibonacci.action"
+    builtin_interfaces
+    geometry_msgs
+  ADD_LINTER_TESTS
+)
+
 
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
@@ -78,12 +101,6 @@ find_package(catkin REQUIRED COMPONENTS
 ## LIBRARIES: libraries you create in this project that dependent projects also need
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
-catkin_package(
-  #INCLUDE_DIRS include
-  LIBRARIES waypoint_action_client
-  CATKIN_DEPENDS actionlib_msgs # actionlib geometry_msgs message_generation nav_msgs roscpp rospy std_msgs
-  #DEPENDS system_lib
-)
 
 ###########
 ## Build ##
@@ -91,10 +108,7 @@ catkin_package(
 
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
-include_directories(
-# include
-  ${catkin_INCLUDE_DIRS}
-)
+include_directories(include ${Boost_INCLUDE_DIRS})
 
 ## Declare a C++ library
 # add_library(${PROJECT_NAME}
@@ -161,3 +175,7 @@ include_directories(
 #   DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}
 # )
 
+ament_export_include_directories(include)
+ament_export_libraries(${library_name})
+ament_export_dependencies(rosidl_default_runtime)
+ament_package()

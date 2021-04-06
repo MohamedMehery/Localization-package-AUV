@@ -37,7 +37,6 @@
 
 int main(int argc, char **argv)
 {
-
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions options;
   options.arguments({"ekf_filter_node"});
